@@ -18,7 +18,7 @@ if __name__ == "__main__":
         if is_available:
             mail_service.send_notification_email(cfg)
 
-        n_minutes = 10
+        n_minutes = 1
         n_seconds = 60
 
         time.sleep(n_minutes * n_seconds)

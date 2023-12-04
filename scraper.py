@@ -40,21 +40,27 @@ class Nvidia4090Available(Task):
         )
 
         # Create a new WebDriver instance for each call
-        with webdriver.Chrome(options=chrome_options) as driver:
-            # Open the website in the browser
-            driver.get(self.url)
+        try:
+            with webdriver.Chrome(options=chrome_options) as driver:
+                # Open the website in the browser
+                driver.get(self.url)
 
-            # Wait for the page to load
-            time.sleep(5)
+                # Wait for the page to load
+                time.sleep(5)
 
-            # Get the page source after JavaScript has rendered the content
-            page_source = driver.page_source
+                # Get the page source after JavaScript has rendered the content
+                page_source = driver.page_source
+        except Exception as e:
+            logger.error(e)
+            return None
 
         logger.info("Retrieving static content done.")
         return page_source
 
     def _product_available(self):
         page_content = self.get_static_content()
+        if page_content is None:
+            return False
         soup = BeautifulSoup(page_content, "html.parser")
         product_to_search_for = "NVGFT490"
 
